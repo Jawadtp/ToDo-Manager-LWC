@@ -4,5 +4,10 @@ export default class ToDoItem extends LightningElement
 {
     @api todoId;
     @api todoName;
-    @api done=false;
+    @api done;
+
+    get containerClass()
+    {
+        return this.done?"todo completed":"todo upcoming"
+    }
 }

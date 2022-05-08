@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+import addTodo from "@salesforce/apex/ToDoController.addTodo"
 
 export default class ToDoManager extends LightningElement 
 {
@@ -9,6 +10,8 @@ export default class ToDoManager extends LightningElement
     connectedCallback()
     {
         this.getTime()
+
+        this.populateTodos()
 
         // Time doesn't get updated unless page is refreshed. This problem is solved with a timer.
         setInterval(() => 
@@ -59,14 +62,19 @@ export default class ToDoManager extends LightningElement
         const inputBox = this.template.querySelector(".taskInput") 
         
         const todo = {
-            todoId: this.todos.length,
             todoName: inputBox.value,
             done: false,
-            todoDate: new Date()
+            
         }
 
-        this.todos.push(todo)
+      //  this.todos.push(todo)
         
+        addTodo({payload: JSON.stringify(todo)}).then(response => {
+            console.log("Insertion successful")
+        }).catch(error => {
+            console.error("Failed to insert todo: ",error)
+        })
+
         console.log('Todos: ', this.todos)
     }
 
@@ -78,5 +86,38 @@ export default class ToDoManager extends LightningElement
     get completedTasks()
     {
         return this.todos.filter(todo=>todo.done)
+    }
+
+    populateTodos()
+    {
+        const todosToAdd = 
+        [
+            {
+                todoId: 0,
+                todoName: "Wash the car",
+                done: false,
+                todoDate: new Date()
+            },
+            {
+                todoId: 1,
+                todoName: "Do laundry",
+                done: false,
+                todoDate: new Date()
+            },
+            {
+                todoId: 2,
+                todoName: "Water plants",
+                done: false,
+                todoDate: new Date()
+            },
+            {
+                todoId: 3,
+                todoName: "Charge powerbank",
+                done: true,
+                todoDate: new Date()
+            },
+        ]
+
+        this.todos=todosToAdd
     }
 }
