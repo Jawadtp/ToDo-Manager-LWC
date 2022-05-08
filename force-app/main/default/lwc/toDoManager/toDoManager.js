@@ -1,9 +1,10 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, track } from 'lwc';
 
 export default class ToDoManager extends LightningElement 
 {
     time="8:30 PM"
     greeting="Good evening"
+    @track todos = [] //track decorator is required for arrays/objects
 
     connectedCallback()
     {
@@ -49,5 +50,33 @@ export default class ToDoManager extends LightningElement
         else if(hour>=12 && hour<17)
             this.greeting="Good afternoon"
         else this.greeting="Good evening"
+    }
+
+    addTodoHandler()
+    {
+        //Select element by class (by id doesnt work in LWC). You can also select by element.
+       // const inputBox = this.template.querySelector("lightning-input") 
+        const inputBox = this.template.querySelector(".taskInput") 
+        
+        const todo = {
+            todoId: this.todos.length,
+            todoName: inputBox.value,
+            done: false,
+            todoDate: new Date()
+        }
+
+        this.todos.push(todo)
+        
+        console.log('Todos: ', this.todos)
+    }
+
+    get upcomingTasks()
+    {
+        return this.todos.filter(todo=>!todo.done)
+    }
+
+    get completedTasks()
+    {
+        return this.todos.filter(todo=>todo.done)
     }
 }

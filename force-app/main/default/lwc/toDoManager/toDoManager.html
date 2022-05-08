@@ -9,14 +9,42 @@
             <div class="greeting">{greeting}</div>
         </lightning-layout-item>
 
+        <lightning-layout-item size="12">
+            <div class="slds-text-heading_large slds-m-vertical_large">
+                What are you focusing on today?
+            </div>
+            
+        </lightning-layout-item>
+
         <lightning-layout>
+
             <lightning-layout-item size="11">
-                <lightning-input label="What's on your mind?" variant="label-hidden"></lightning-input>
+                <lightning-input class="taskInput" type="text" label="What's on your mind?" variant="label-hidden" placeholder="What's on your mind?"></lightning-input>
             </lightning-layout-item>
 
             <lightning-layout-item size="1">
                 <lightning-button-icon icon-name="utility:add" title="Add todo" onclick={addTodoHandler}></lightning-button-icon>
             </lightning-layout-item>
+
         </lightning-layout>
+
+        <lightning-layout-item size="12">
+           <div>Upcoming</div>
+            <template for:each={upcomingTasks} for:item="todo">
+                    <c-to-do-item key={todo.todoId} todo-id={todo.todoId} todo-name={todo.todoName}></c-to-do-item>
+            </template>
+        </lightning-layout-item>
+
+        <lightning-layout-item size="12">
+            <div>Completed</div>
+             <template for:each={completedTasks} for:item="todo">
+                     <div class="item-class" key={todo.todoId}>
+                         <span class="slds-text-heading_label">{todo.todoName}</span>
+                         <lightning-button-icon icon-name="utility:check" class="slds-p-horizontal_medium" onclick={updateHandler} title="Update todo"></lightning-button-icon>
+                         <lightning-button-icon icon-name="utility:delete" onclick={deleteHandler} title="Delete todo"></lightning-button-icon>
+                     </div>
+             </template>
+         </lightning-layout-item>
+
     </lightning-layout>
 </template>
